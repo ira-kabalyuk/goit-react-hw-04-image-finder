@@ -1,4 +1,6 @@
-@import-normalize; /* bring in normalize.css styles */
+@import-normalize;
+@import './styles/_reboot.scss';
+/* bring in normalize.css styles */
 
 body {
   margin: 0;
