@@ -1,0 +1,15 @@
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 16px;
+}
+
+img {
+  display: block;
+  width: 100%;
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+}

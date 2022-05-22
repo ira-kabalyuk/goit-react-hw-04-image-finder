@@ -1,5 +1,27 @@
-import { Container } from './Container';
+import React, { Component } from 'react';
 
-export const App = () => {
-  return <Container>react template</Container>;
-};
+import { Container } from './Container';
+import { Searchbar } from './Searchbar';
+import { ImageGallery } from './ImageGallery';
+class App extends Component {
+  state = {
+    imageName: '',
+  };
+
+  handleFormSubmit = imageName => {
+    this.setState({ imageName });
+  };
+
+  render() {
+    return (
+      <>
+        <Searchbar onSubmit={this.handleFormSubmit} />
+        <Container>
+          <ImageGallery imageName={this.state.imageName} />
+        </Container>
+      </>
+    );
+  }
+}
+
+export { App };

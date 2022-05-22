@@ -1,9 +1,10 @@
 .container {
   max-width: 1024px;
-  margin: 20px auto;
-  padding: 0 20px;
+  margin: 0 auto;
+  padding: 20px;
 
   @media (min-width: 1024px) {
-    padding: 0;
+    padding-left: 0;
+    padding-right: 0;
   }
 }
