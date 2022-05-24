@@ -22,9 +22,15 @@ class ImageGallery extends Component {
   componentDidUpdate(prevProps, prevState) {
     const prevName = prevProps.imageName;
     const nextName = this.props.imageName;
-    const prevPage = prevState.page;
-    const nextPage = this.state.page;
-    const perPage = this.state.perPage;
+    let prevPage = prevState.page;
+    let nextPage = this.state.page;
+    let perPage = this.state.perPage;
+
+    if (prevName !== nextName) {
+      prevPage = 1;
+      nextPage = 1;
+      perPage = 12;
+    }
 
     if (prevName !== nextName || prevPage !== nextPage) {
       this.setState({ loading: true });
@@ -56,7 +62,7 @@ class ImageGallery extends Component {
 
   closeModalHandler = () => {
     console.log('close');
-    this.setState = () => ({
+    this.setState({
       modal: false,
     });
   };
