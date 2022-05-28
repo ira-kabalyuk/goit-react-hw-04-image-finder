@@ -23,7 +23,6 @@ class Searchbar extends Component {
     }
 
     this.props.onSubmit(this.state.imageName); //ссылка на проп onSubmit из App
-    this.setState({ imageName: '' });
   };
 
   render() {
