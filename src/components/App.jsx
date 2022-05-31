@@ -22,6 +22,7 @@ class App extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
+    console.log('update');
     const prevName = prevState.imageName;
     const nextName = this.state.imageName;
     const prevPage = prevState.page;
