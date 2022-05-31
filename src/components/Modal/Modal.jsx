@@ -8,8 +8,6 @@ const modalRoot = document.querySelector('#modal-root');
 
 class Modal extends Component {
   componentDidMount() {
-    console.log('component Did Mount');
-
     window.addEventListener('keydown', this.handleKeyDown);
   }
 
