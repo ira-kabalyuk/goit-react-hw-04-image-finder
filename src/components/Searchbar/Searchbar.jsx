@@ -1,4 +1,3 @@
-import { toHaveFocus } from '@testing-library/jest-dom/dist/matchers';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { BiSearch } from 'react-icons/bi';
