@@ -10,7 +10,7 @@ import { Loader } from './Loader';
 class App extends Component {
   state = {
     imageName: '',
-    image: null,
+    image: [],
     loading: false,
     error: null,
     page: 1,
@@ -22,17 +22,15 @@ class App extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('update');
     const prevName = prevState.imageName;
     const nextName = this.state.imageName;
     const prevPage = prevState.page;
     const nextPage = this.state.page;
-    const perPage = this.state.perPage;
 
     if (prevName !== nextName || prevPage !== nextPage) {
       this.setState({ loading: true });
       fetch(
-        `https://pixabay.com/api/?q=${nextName}&page=${nextPage}&key=25755883-425392836cbaa44f717c19250&image_type=photo&orientation=horizontal&per_page=${perPage}`
+        `https://pixabay.com/api/?q=${nextName}&page=${nextPage}&key=25755883-425392836cbaa44f717c19250&image_type=photo&orientation=horizontal&per_page=12`
       )
         .then(responce => {
           if (responce.ok) {
@@ -40,7 +38,12 @@ class App extends Component {
           }
           return Promise.reject(new Error('Error'));
         })
-        .then(image => this.setState({ image, total: image.total }))
+        .then(responce =>
+          this.setState(prevState => ({
+            image: [...prevState.image, ...responce.hits],
+            total: responce.total,
+          }))
+        )
         .catch(error => this.setState({ error }))
         .finally(() => this.setState({ loading: false }));
     }
@@ -49,15 +52,14 @@ class App extends Component {
   handleFormSubmit = imageName => {
     this.setState(prevState => ({
       imageName: imageName,
-      page: (prevState.page = 1),
-      perPage: (prevState.perPage = 12),
+      page: 1,
+      image: [],
     }));
   };
 
   loadMoreHandler = () => {
     this.setState(prevState => ({
-      page: (prevState.page += 1),
-      perPage: (prevState.perPage += 12),
+      page: prevState.page + 1,
     }));
   };
 
@@ -66,7 +68,7 @@ class App extends Component {
     this.setState(prevState => ({
       modal: true,
       id: +id,
-      imageItem: prevState.image.hits.find(image => image.id === +id),
+      imageItem: prevState.image.find(image => image.id === +id),
     }));
   };
 
@@ -82,7 +84,8 @@ class App extends Component {
   };
 
   render() {
-    const { error, modal, loading, imageName, total, perPage } = this.state;
+    const { error, modal, loading, imageName, total, image } = this.state;
+    const imageLength = image.length;
     return (
       <>
         {error && alert(error.message)}
@@ -94,10 +97,10 @@ class App extends Component {
             image={this.state.image}
             isOpenModal={this.openModalHandler}
           />
-          {perPage < total && (
+          {!imageLength < total && loading && <Loader />}
+          {imageLength < total && !loading && (
             <Button onClick={this.loadMoreHandler} text="load more"></Button>
           )}
-
           {modal && (
             <Modal
               onClose={this.closeModalHandler}

@@ -12,7 +12,7 @@ class ImageGallery extends Component {
     return (
       <ul className={styles.gallery}>
         {image &&
-          image.hits.map(({ id, webformatURL, tags }) => (
+          image.map(({ id, webformatURL, tags }) => (
             <ImageGalleryItem
               key={id}
               id={id}
@@ -28,7 +28,7 @@ class ImageGallery extends Component {
 
 ImageGallery.propTypes = {
   isOpenModal: PropTypes.func.isRequired,
-  image: PropTypes.object,
+  image: PropTypes.array.isRequired,
 };
 
 export { ImageGallery };
