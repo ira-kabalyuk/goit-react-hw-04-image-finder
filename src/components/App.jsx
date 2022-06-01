@@ -90,7 +90,6 @@ class App extends Component {
         {error && alert(error.message)}
         <Searchbar onSubmit={this.handleFormSubmit} />
         <Container>
-          {loading && <Loader />}
           <ImageGallery
             imageName={this.state.imageName}
             image={this.state.image}
