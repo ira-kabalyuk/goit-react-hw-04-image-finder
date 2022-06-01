@@ -49,11 +49,11 @@ class App extends Component {
   }
 
   handleFormSubmit = imageName => {
-    this.setState(prevState => ({
+    this.setState({
       imageName: imageName,
       page: 1,
       image: [],
-    }));
+    });
   };
 
   loadMoreHandler = () => {
