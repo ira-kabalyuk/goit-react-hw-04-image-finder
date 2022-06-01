@@ -14,7 +14,6 @@ class App extends Component {
     loading: false,
     error: null,
     page: 1,
-    perPage: 12,
     modal: false,
     id: null,
     imageItem: null,
