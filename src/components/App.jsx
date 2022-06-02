@@ -95,7 +95,7 @@ class App extends Component {
             image={this.state.image}
             isOpenModal={this.openModalHandler}
           />
-          {!imageLength < total && loading && <Loader />}
+          {((!image && !imageLength < total) || loading) && <Loader />}
           {imageLength < total && !loading && (
             <Button onClick={this.loadMoreHandler} text="load more"></Button>
           )}
