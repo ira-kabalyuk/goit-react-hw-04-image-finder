@@ -63,7 +63,6 @@ function App() {
   };
 
   const getlargeImageUrl = () => {
-    console.log(imageCardData);
     return imageCardData.largeImageURL;
   };
 
