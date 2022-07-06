@@ -1,51 +1,42 @@
 import { createPortal } from 'react-dom';
-import React, { Component } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Modal.module.scss';
 import { GrClose } from 'react-icons/gr';
 
 const modalRoot = document.querySelector('#modal-root');
 
-class Modal extends Component {
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyDown);
-  }
+function Modal({ url, alt, onClose, id }) {
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyDown);
-  }
-
-  handleKeyDown = event => {
+  const handleKeyDown = event => {
     if (event.code === 'Escape') {
-      this.props.onClose();
+      onClose();
     }
   };
 
-  handleBackDropClick = event => {
+  const handleBackDropClick = event => {
     if (event.target === event.currentTarget) {
-      this.props.onClose();
+      onClose();
     }
   };
 
-  render() {
-    const { url, alt, onClose, id } = this.props;
-
-    return createPortal(
-      <div
-        className={styles.overlay}
-        id={id}
-        onClick={this.handleBackDropClick}
-      >
-        <div className={styles.modal}>
-          <button type="button" onClick={onClose} className={styles.close}>
-            <GrClose className={styles.icon} />
-          </button>
-          <img src={url} alt={alt} />
-        </div>
-      </div>,
-      modalRoot
-    );
-  }
+  return createPortal(
+    <div className={styles.overlay} id={id} onClick={handleBackDropClick}>
+      <div className={styles.modal}>
+        <button type="button" onClick={onClose} className={styles.close}>
+          <GrClose className={styles.icon} />
+        </button>
+        <img src={url} alt={alt} />
+      </div>
+    </div>,
+    modalRoot
+  );
 }
 
 Modal.propTypes = {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { useState, useEffect } from 'react';
 
 import { Container } from './Container';
 import { Searchbar } from './Searchbar';
@@ -7,110 +7,93 @@ import { Button } from './Button';
 import { Modal } from './Modal';
 import { Loader } from './Loader';
 
-class App extends Component {
-  state = {
-    imageName: '',
-    image: [],
-    loading: false,
-    error: null,
-    page: 1,
-    modal: false,
-    id: null,
-    imageItem: null,
-    total: null,
-  };
+function App() {
+  const [imageName, setImageName] = useState('');
+  const [image, setImage] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [modal, setModal] = useState(false);
+  const [id, setId] = useState(null);
+  const [imageCardData, setImageCardData] = useState(null);
+  const [total, setTotal] = useState(null);
 
-  componentDidUpdate(prevProps, prevState) {
-    const prevName = prevState.imageName;
-    const nextName = this.state.imageName;
-    const prevPage = prevState.page;
-    const nextPage = this.state.page;
-
-    if (prevName !== nextName || prevPage !== nextPage) {
-      this.setState({ loading: true });
-      fetch(
-        `https://pixabay.com/api/?q=${nextName}&page=${nextPage}&key=25755883-425392836cbaa44f717c19250&image_type=photo&orientation=horizontal&per_page=12`
-      )
-        .then(responce => {
-          if (responce.ok) {
-            return responce.json();
-          }
-          return Promise.reject(new Error('Error'));
-        })
-        .then(responce =>
-          this.setState(prevState => ({
-            image: [...prevState.image, ...responce.hits],
-            total: responce.total,
-          }))
-        )
-        .catch(error => this.setState({ error }))
-        .finally(() => this.setState({ loading: false }));
+  useEffect(() => {
+    if (!imageName) {
+      return; // пропускаем первый рендер
     }
-  }
 
-  handleFormSubmit = imageName => {
-    this.setState({
-      imageName: imageName,
-      page: 1,
-      image: [],
-    });
+    setLoading(true);
+    fetch(
+      `https://pixabay.com/api/?q=${imageName}&page=${page}&key=25755883-425392836cbaa44f717c19250&image_type=photo&orientation=horizontal&per_page=12`
+    )
+      .then(responce => {
+        if (responce.ok) {
+          return responce.json();
+        }
+        return Promise.reject(new Error('Error'));
+      })
+      .then(json => {
+        setImage(prevState => [...prevState, ...json.hits]);
+        setTotal(json.total);
+      })
+      .catch(error => setError(error))
+      .finally(() => setLoading(false));
+  }, [imageName, page]);
+
+  const handleFormSubmit = imageName => {
+    setImageName(imageName);
+    setPage(1);
+    setImage([]);
   };
 
-  loadMoreHandler = () => {
-    this.setState(prevState => ({
-      page: prevState.page + 1,
-    }));
+  const loadMoreHandler = () => {
+    setPage(prevState => prevState + 1);
   };
 
-  openModalHandler = event => {
+  const openModalHandler = event => {
     const { id } = event.target;
-    this.setState(prevState => ({
-      modal: true,
-      id: +id,
-      imageItem: prevState.image.find(image => image.id === +id),
-    }));
+    setModal(true);
+    setId(+id);
+    setImageCardData(image.find(image => image.id === +id));
   };
 
-  closeModalHandler = () => {
-    this.setState({
-      modal: false,
-    });
+  const closeModalHandler = () => {
+    setModal(false);
   };
 
-  getlargeImageUrl = () => {
-    const url = this.state.imageItem;
-    return url.largeImageURL;
+  const getlargeImageUrl = () => {
+    console.log(imageCardData);
+    return imageCardData.largeImageURL;
   };
 
-  render() {
-    const { error, modal, loading, imageName, total, image } = this.state;
-    const imageLength = image.length;
-    return (
-      <>
-        {error && alert(error.message)}
-        <Searchbar onSubmit={this.handleFormSubmit} />
-        <Container>
-          <ImageGallery
-            imageName={this.state.imageName}
-            image={this.state.image}
-            isOpenModal={this.openModalHandler}
+  const imageLength = image.length;
+
+  return (
+    <>
+      {error && alert(error.message)}
+      <Searchbar onSubmit={handleFormSubmit} />
+      <Container>
+        <ImageGallery
+          imageName={imageName}
+          image={image}
+          isOpenModal={openModalHandler}
+        />
+        {((!image && !imageLength < total) || loading) && <Loader />}
+        {imageLength < total && !loading && (
+          <Button onClick={loadMoreHandler} text="load more"></Button>
+        )}
+        {modal && (
+          <Modal
+            onClose={closeModalHandler}
+            id={id}
+            url={getlargeImageUrl()}
+            alt={imageName}
           />
-          {((!image && !imageLength < total) || loading) && <Loader />}
-          {imageLength < total && !loading && (
-            <Button onClick={this.loadMoreHandler} text="load more"></Button>
-          )}
-          {modal && (
-            <Modal
-              onClose={this.closeModalHandler}
-              id={this.state.id}
-              url={this.getlargeImageUrl()}
-              alt={imageName}
-            />
-          )}
-        </Container>
-      </>
-    );
-  }
+        )}
+      </Container>
+    </>
+  );
 }
 
 export { App };
