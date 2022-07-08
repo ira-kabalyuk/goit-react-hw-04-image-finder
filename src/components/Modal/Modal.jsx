@@ -6,7 +6,7 @@ import { GrClose } from 'react-icons/gr';
 
 const modalRoot = document.querySelector('#modal-root');
 
-function Modal({ url, alt, onClose, id }) {
+function Modal({ url, alt, onClose }) {
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     return () => {
@@ -27,7 +27,7 @@ function Modal({ url, alt, onClose, id }) {
   };
 
   return createPortal(
-    <div className={styles.overlay} id={id} onClick={handleBackDropClick}>
+    <div className={styles.overlay} onClick={handleBackDropClick}>
       <div className={styles.modal}>
         <button type="button" onClick={onClose} className={styles.close}>
           <GrClose className={styles.icon} />
@@ -43,7 +43,7 @@ Modal.propTypes = {
   url: PropTypes.string.isRequired,
   alt: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
-  id: PropTypes.number.isRequired,
+  //id: PropTypes.number.isRequired,
 };
 
 export { Modal };

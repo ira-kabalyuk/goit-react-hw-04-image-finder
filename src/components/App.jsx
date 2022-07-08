@@ -15,6 +15,7 @@ function App() {
   const [page, setPage] = useState(1);
   const [modal, setModal] = useState(false);
   const [id, setId] = useState(null);
+  const [url, setUrl] = useState(null);
   const [imageCardData, setImageCardData] = useState(null);
   const [total, setTotal] = useState(null);
 
@@ -53,21 +54,15 @@ function App() {
 
   const openModalHandler = event => {
     const { id } = event.target;
+    const findImage = image.find(image => image.id === +id);
     setId(+id);
-    //setImageCardData(prevState => prevState.find(image => image.id === +id));
-    setImageCardData(image.find(image => image.id === +id));
+    setImageCardData(findImage);
     setModal(true);
-    console.log(id, 'id');
-    console.log(image, 'image');
-    console.log(imageCardData, 'card');
+    setUrl(findImage.largeImageURL);
   };
 
   const closeModalHandler = () => {
     setModal(false);
-  };
-
-  const getlargeImageUrl = () => {
-    return imageCardData.largeImageURL;
   };
 
   const imageLength = image.length;
@@ -87,12 +82,7 @@ function App() {
           <Button onClick={loadMoreHandler} text="load more"></Button>
         )}
         {modal && (
-          <Modal
-            onClose={closeModalHandler}
-            id={id}
-            url={getlargeImageUrl()}
-            alt={imageName}
-          />
+          <Modal onClose={closeModalHandler} url={url} alt={imageName} />
         )}
       </Container>
     </>
