@@ -53,9 +53,13 @@ function App() {
 
   const openModalHandler = event => {
     const { id } = event.target;
-    setModal(true);
     setId(+id);
+    //setImageCardData(prevState => prevState.find(image => image.id === +id));
     setImageCardData(image.find(image => image.id === +id));
+    setModal(true);
+    console.log(id, 'id');
+    console.log(image, 'image');
+    console.log(imageCardData, 'card');
   };
 
   const closeModalHandler = () => {
