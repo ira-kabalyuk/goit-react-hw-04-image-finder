@@ -12,7 +12,7 @@ function Modal({ url, alt, onClose }) {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  });
 
   const handleKeyDown = event => {
     if (event.code === 'Escape') {
