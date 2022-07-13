@@ -14,9 +14,11 @@ function App() {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const [modal, setModal] = useState(false);
-  const [id, setId] = useState(null);
   const [url, setUrl] = useState(null);
+  /* eslint-disable */
+  const [id, setId] = useState(null);
   const [imageCardData, setImageCardData] = useState(null);
+  /* eslint-enable */
   const [total, setTotal] = useState(null);
 
   useEffect(() => {
