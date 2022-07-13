@@ -43,7 +43,6 @@ Modal.propTypes = {
   url: PropTypes.string.isRequired,
   alt: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
-  //id: PropTypes.number.isRequired,
 };
 
 export { Modal };
